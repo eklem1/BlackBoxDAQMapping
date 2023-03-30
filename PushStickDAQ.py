@@ -113,17 +113,20 @@ set_scan_length = 50 #500 #number of scans
 set_nreads = 1 #number of times you repeat the scan
 
 #set the name of the file to be used to collect the stats of the data
-StatsFileName = 'testStats.csv'
+now = datetime.now()
+timeStamp = now.strftime("%Y%m%d_%H%M%S")
+
+StatsFileName = f'{timeStamp}_testStats.csv'
 #flag to add into each individual data file's name
 dataFlag = ''
 
 ############## Main code ##############
 def main(e):
 	print( "All individual data will be saved to files starting with "+
-		f"`data{dataFlag}`, and the final stats file is {StatsFileName}.\n"
+		f"`{timeStamp}_data{dataFlag}`, and the final stats file is `{StatsFileName}`.\n"
 		f"Each data point is set to take data for {set_scan_length/set_scan_rate} s, at {set_scan_rate} Hz.\n"+
 		"Enter 'exit' to end the program.\n"+
-		"Start your data taking!"
+		"Press enter to start your data taking!"
 		)
 
 	############## Connect to the labjack ##############
@@ -165,7 +168,7 @@ def main(e):
 			times_all, df_all = LJ_obj.read(scan_rate=set_scan_rate, scan_length=set_scan_length, 
 											nreads=set_nreads, save=True)
 
-			LJ_obj.to_csv(f"data{dataFlag}_d={distanceToSet}.csv")
+			LJ_obj.to_csv(f"{timeStamp}_data{dataFlag}_d={distanceToSet}.csv")
 			print("Done")
 
 		# finish

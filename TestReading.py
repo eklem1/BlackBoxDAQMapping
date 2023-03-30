@@ -11,16 +11,16 @@ from io import StringIO
 import LabJackT7 as lj
 
 #make labjack reader object
-LJ_obj = lj.LabJackT7(channel_list=[1])
+LJ_obj = lj.LabJackT7(channel_list=[10])
 
 #try to connect
 LJ_obj.connect()
 
 #live time continusous drawing
-# LJ_obj.draw(scan_rate=1500, scan_duration=5)
+# LJ_obj.draw(scan_rate=1000, scan_duration=2)
 # """
 set_scan_rate = 100 #Hz
-set_scan_length = 1000 #number of scans
+set_scan_length = 10 #number of scans
 set_nreads = 1 #number of times you repeat the scan
 
 print(f"Getting data for {set_scan_length/set_scan_rate} s, "+
@@ -31,7 +31,7 @@ times_all, df_all = LJ_obj.read(scan_rate=set_scan_rate, scan_length=set_scan_le
 
 print(times_all, df_all)
 # """
-LJ_obj.to_csv("test.csv")
+# LJ_obj.to_csv("test.csv")
 # LJ_obj.to_csv("SineZ_1Hz_5Vpp.csv")
 
 """
