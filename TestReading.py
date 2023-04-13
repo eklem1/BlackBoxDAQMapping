@@ -11,13 +11,13 @@ from io import StringIO
 import LabJackT7 as lj
 
 #make labjack reader object
-LJ_obj = lj.LabJackT7(channel_list=[10])
+LJ_obj = lj.LabJackT7(channel_list=[1])
 
 #try to connect
 LJ_obj.connect()
 
 #live time continusous drawing
-# LJ_obj.draw(scan_rate=1000, scan_duration=2)
+LJ_obj.draw(scan_rate=1000, scan_duration=2)
 # """
 set_scan_rate = 100 #Hz
 set_scan_length = 10 #number of scans

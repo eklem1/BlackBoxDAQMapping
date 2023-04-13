@@ -38,19 +38,22 @@ def countdown(secs):
 	return
 
 
-def to_csv_header(LJ_object, filename, idx=-1):
+def to_csv_header(LJ_object, filename, GeometrySetUp, idx=-1):
 	"""
 	Create the header for the summary data file
 	"""
 
 	# write file header
-	msg = 'Stats for multiple readings'
+	msg = 'Data taken with Mag690-FL1000 #412, test1 of pushstick, SCM off'
 
-	header = [  f'# labjack output {msg}',
+	header = [  f'# labjack output summary file',
+		f'# {msg}',
 		'# Settings:',
 		f'#   DEVICE_TYPE:              {LJ_object.DEVICE_TYPE}',
 		f'#   CONNECTION_TYPE:          {LJ_object.CONNECTION_TYPE}',
 		f'#   IP:                       {LJ_object.IP}',
+		f'#   l_out:                    {GeometrySetUp["length of tube out"]}',
+		f'#   l_scm:                    {GeometrySetUp["distance from center of SCM to MSR wall"]}'
 		]
 	header.extend([f'#   {key}:' + ' '*(25-len(key)) + f'{val}' 
 	for key, val in LJ_object.STREAM_SETTINGS.items()])
@@ -120,6 +123,16 @@ StatsFileName = f'{timeStamp}_testStats.csv'
 #flag to add into each individual data file's name
 dataFlag = ''
 
+############## Set up of your set up geometry ##############
+l_tube_out = 95.5 #cm
+l_SCM = 44 #cm
+
+GeometrySetUp = {
+	"length of tube out": l_tube_out, 
+	"distance from center of SCM to MSR wall": l_SCM, 
+}
+
+
 ############## Main code ##############
 def main(e):
 	print( "All individual data will be saved to files starting with "+
@@ -133,13 +146,13 @@ def main(e):
 	#make labjack reader object
 
 	#right now just reading one FG channel, but you can put more here
-	LJ_obj = lj.LabJackT7(channel_list=[1, 4])
+	LJ_obj = lj.LabJackT7(channel_list=[1])
 
 	#try to connect  - should add a try-except here
 	LJ_obj.connect()
 
 	#write the header of the stats file
-	to_csv_header(LJ_obj, StatsFileName)
+	to_csv_header(LJ_obj, StatsFileName, GeometrySetUp)
 
 	############## Take data ##############
 	while not e.is_set():
