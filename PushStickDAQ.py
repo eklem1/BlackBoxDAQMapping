@@ -44,7 +44,7 @@ def to_csv_header(LJ_object, filename, GeometrySetUp, idx=-1):
 	"""
 
 	# write file header
-	msg = 'Data taken with Mag690-FL1000 #412, test1 of pushstick, SCM off'
+	msg = 'Data taken with Mag690-FL1000 #412, test of pushstick with full set up, miniMSR degaussed, miniB0: V=0.100 V, I=0.079A.'
 
 	header = [  f'# labjack output summary file',
 		f'# {msg}',
@@ -124,8 +124,8 @@ StatsFileName = f'{timeStamp}_testStats.csv'
 dataFlag = ''
 
 ############## Set up of your set up geometry ##############
-l_tube_out = 95.5 #cm
-l_SCM = 44 #cm
+l_tube_out = 90.8 #cm
+l_SCM = 50 #cm
 
 GeometrySetUp = {
 	"length of tube out": l_tube_out, 
@@ -174,7 +174,7 @@ def main(e):
 
 		if not e.is_set():
 			print(f"Taking data for d={distanceToSet} cm in:")
-			countdown(2)
+			countdown(1)
 			# '''
 
 			# collect data
