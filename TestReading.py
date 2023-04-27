@@ -16,8 +16,9 @@ LJ_obj = lj.LabJackT7(channel_list=[1])
 #try to connect
 LJ_obj.connect()
 
-#live time continusous drawing
-LJ_obj.draw(scan_rate=1000, scan_duration=2)
+# live time continusous drawing
+# LJ_obj.draw(scan_rate=1000, scan_duration=2)
+
 # """
 set_scan_rate = 100 #Hz
 set_scan_length = 10 #number of scans
@@ -30,8 +31,9 @@ times_all, df_all = LJ_obj.read(scan_rate=set_scan_rate, scan_length=set_scan_le
 	nreads=set_nreads, save=True)
 
 print(times_all, df_all)
+
 # """
-# LJ_obj.to_csv("test.csv")
+# LJ_obj.to_csv("test2.csv")
 # LJ_obj.to_csv("SineZ_1Hz_5Vpp.csv")
 
 """

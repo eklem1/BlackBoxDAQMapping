@@ -2,7 +2,8 @@
 Emma Klemets, Mar 2023
 
 Code to use with a stick mapper set up, taking data in intervals, taking user input
-to label each data set with a corresponding distance. 
+to label each data set with a corresponding distance. All data will be saved in a sub
+folder created in ./data/ labeled by the date.
 
 Requires the installation for LabJackT7 found at: https://github.com/ucn-triumf/labjack_mag_readout
 """
@@ -14,6 +15,7 @@ import numpy as np
 import pandas as pd
 from tqdm import tqdm
 from io import StringIO
+import os
 
 import threading
 import time
@@ -38,22 +40,26 @@ def countdown(secs):
 	return
 
 
-def to_csv_header(LJ_object, filename, GeometrySetUp, idx=-1):
+def to_csv_header(LJ_object, filename, GeometrySetUp, msg = '', idx=-1):
 	"""
-	Create the header for the summary data file
+	Create the header for the summary stats data file
 	"""
 
 	# write file header
-	msg = 'Data taken with Mag690-FL1000 #412, test of pushstick with full set up, miniMSR degaussed, miniB0: V=0.100 V, I=0.079A.'
 
 	header = [  f'# labjack output summary file',
 		f'# {msg}',
-		'# Settings:',
+		 '# Settings:',
 		f'#   DEVICE_TYPE:              {LJ_object.DEVICE_TYPE}',
 		f'#   CONNECTION_TYPE:          {LJ_object.CONNECTION_TYPE}',
 		f'#   IP:                       {LJ_object.IP}',
 		f'#   l_out:                    {GeometrySetUp["length of tube out"]}',
-		f'#   l_scm:                    {GeometrySetUp["distance from center of SCM to MSR wall"]}'
+		f'#   l_scm:                    {GeometrySetUp["distance from center of SCM to MSR wall"]}',
+		f'#   FG number:                {GeometrySetUp["FG_num"]}',
+		f'#   B0coil Current:                {GeometrySetUp["B0coil_Current"]}',
+		f'#   SCMcoil Current:                {GeometrySetUp["SCMcoil_Current"]}',
+		f'#   Saddlecoil Current:                {GeometrySetUp["Saddlecoil_Current"]}'
+
 		]
 	header.extend([f'#   {key}:' + ' '*(25-len(key)) + f'{val}' 
 	for key, val in LJ_object.STREAM_SETTINGS.items()])
@@ -66,6 +72,7 @@ def to_csv_header(LJ_object, filename, GeometrySetUp, idx=-1):
 
 	with open(filename, 'w') as fid:
 		fid.write('\n'.join(header))
+	return
 
 
 def to_csv_stats(distance, LJ_object, filename):
@@ -110,26 +117,55 @@ def to_csv_stats(distance, LJ_object, filename):
 
 	return
 
+
 ############## Set up of the labjack and file names ##############
 set_scan_rate = 100 #Hz
-set_scan_length = 50 #500 #number of scans
+set_scan_length = 10 #500 #number of scans
 set_nreads = 1 #number of times you repeat the scan
 
 #set the name of the file to be used to collect the stats of the data
 now = datetime.now()
 timeStamp = now.strftime("%Y%m%d_%H%M%S")
+dayStamp = now.strftime("%Y-%m-%d")
 
-StatsFileName = f'{timeStamp}_testStats.csv'
+#the folder where all the data will be saved
+folder = f'./data/{dayStamp}/'
+#make the folder if it doesn't exist yet
+os.makedirs(folder, exist_ok=True)  
+
+StatsFileName = f'{folder}{timeStamp}_testStats.csv'
 #flag to add into each individual data file's name
 dataFlag = ''
 
 ############## Set up of your set up geometry ##############
-l_tube_out = 90.8 #cm
-l_SCM = 50 #cm
+#right now this you have to input yourself here
+l_tube_out = 93.1 #cm
+l_SCM = 20.4 #cm
+FG_num = 410
+
+B0coil_Current = None
+SCMcoil_Current = None
+Saddlecoil_Current = 0.079
+
+# a message to put in your header (new lines should start with a # )
+# msg = 'Data taken with Mag690-FL1000 #410, test of pushstick with full set up, \n'+ \
+# 		'# miniMSR degaussed, miniB0: V=0.102 V, I=0.079A. \n'+ \
+# 		'# MiniSCM on: V=1.408 V, I=0.551A.'
+
+msg = 'Data taken with Mag690-FL1000 #410, second test of saddle coil , \n'+ \
+		'# miniMSR degaussed, miniB0 & SCM coils off \n'+ \
+		'# Coords usually centered around the SCM are now relative to the center of the saddle coil \n'+ \
+		'# Saddle coil high field axis is vertical (+z), saddle coil: I=0.079 A, V=0.166 V'
+
+
 
 GeometrySetUp = {
 	"length of tube out": l_tube_out, 
 	"distance from center of SCM to MSR wall": l_SCM, 
+	"FG_num": FG_num,
+	"B0coil_Current": B0coil_Current,
+	"SCMcoil_Current": SCMcoil_Current,
+	"Saddlecoil_Current": Saddlecoil_Current
 }
 
 
@@ -152,7 +188,7 @@ def main(e):
 	LJ_obj.connect()
 
 	#write the header of the stats file
-	to_csv_header(LJ_obj, StatsFileName, GeometrySetUp)
+	to_csv_header(LJ_obj, StatsFileName, GeometrySetUp, msg)
 
 	############## Take data ##############
 	while not e.is_set():
@@ -174,14 +210,14 @@ def main(e):
 
 		if not e.is_set():
 			print(f"Taking data for d={distanceToSet} cm in:")
-			countdown(1)
+			# countdown(1)
 			# '''
 
 			# collect data
 			times_all, df_all = LJ_obj.read(scan_rate=set_scan_rate, scan_length=set_scan_length, 
 											nreads=set_nreads, save=True)
 
-			LJ_obj.to_csv(f"{timeStamp}_data{dataFlag}_d={distanceToSet}.csv")
+			LJ_obj.to_csv(f"{folder}{timeStamp}_data{dataFlag}_d={distanceToSet}.csv")
 			print("Done")
 
 		# finish
@@ -191,6 +227,7 @@ def main(e):
 
 	print('Exiting')
 	LJ_obj.disconnect()
+
 
 # This containts the code to end the program
 # from https://stackoverflow.com/questions/65595027/how-to-interrupt-python-program-on-user-input
