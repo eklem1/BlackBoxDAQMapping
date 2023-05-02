@@ -1,0 +1,27 @@
+# labjack output summary file
+# Data taken with Mag690-FL1000 #410, test of pushstick with full set up, 
+# miniMSR degaussed with coils off, all coils off.
+# Settings:
+#   DEVICE_TYPE:              T7
+#   CONNECTION_TYPE:          ETHERNET
+#   IP:                       142.90.100.26
+#   l_out:                    92.7
+#   l_scm:                    43
+#   FG number:                410
+#   B0coil Current:                None
+#   SCMcoil Current:                None
+#   Saddlecoil Current:                None
+#   STREAM_TRIGGER_INDEX:     0
+#   STREAM_CLOCK_SOURCE:      0
+#   STREAM_RESOLUTION_INDEX:  0
+#   STREAM_SETTLING_US:       0
+#   AIN_ALL_RANGE:            0
+#   AIN_ALL_NEGATIVE_CH:      199
+# Scan rate of last read:    100 Hz
+#
+# File started at 2023-04-27 15:32:45.025052
+# 
+time [s],distance [cm],CH1x mean,CH1y mean,CH1z mean,CH1x std,CH1y std,CH1z std
+2023-04-27 15:32:50.975765,48.0,0.10717462541162967,0.5186641759872437,0.21853463071584703,0.0003165416648920651,0.00039129840484035524,0.0008748182202059577
+2023-04-27 15:33:06.021564,48.0,0.3068958090543747,0.5729070919752121,7.467761094093323,0.00027729724974699573,0.0003759167524238456,0.0010773286905232072
+2023-04-27 15:33:06.021564,48.0,0.3068958090543747,0.5729070919752121,7.467761094093323,0.00027729724974699573,0.0003759167524238456,0.0010773286905232072

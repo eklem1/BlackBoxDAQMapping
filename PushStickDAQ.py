@@ -58,7 +58,9 @@ def to_csv_header(LJ_object, filename, GeometrySetUp, msg = '', idx=-1):
 		f'#   FG number:                {GeometrySetUp["FG_num"]}',
 		f'#   B0coil Current:                {GeometrySetUp["B0coil_Current"]}',
 		f'#   SCMcoil Current:                {GeometrySetUp["SCMcoil_Current"]}',
-		f'#   Saddlecoil Current:                {GeometrySetUp["Saddlecoil_Current"]}'
+		f'#   SCMcoil Voltage:          {GeometrySetUp["SCMcoil_Voltage"]}',
+		f'#   Saddlecoil Current:                {GeometrySetUp["Saddlecoil_Current"]}',
+		f'#   Solenoidcoil Current:          {GeometrySetUp["Solenoidcoil_Current"]}',
 
 		]
 	header.extend([f'#   {key}:' + ' '*(25-len(key)) + f'{val}' 
@@ -120,7 +122,7 @@ def to_csv_stats(distance, LJ_object, filename):
 
 ############## Set up of the labjack and file names ##############
 set_scan_rate = 100 #Hz
-set_scan_length = 10 #500 #number of scans
+set_scan_length = 500 #number of scans
 set_nreads = 1 #number of times you repeat the scan
 
 #set the name of the file to be used to collect the stats of the data
@@ -139,24 +141,24 @@ dataFlag = ''
 
 ############## Set up of your set up geometry ##############
 #right now this you have to input yourself here
-l_tube_out = 93.1 #cm
-l_SCM = 20.4 #cm
-FG_num = 410
+l_tube_out = 92.7 #cm
+l_SCM = 23.9 #cm
+FG_num = [410, 409] #could be a list if you were using multiple FGs
 
 B0coil_Current = None
 SCMcoil_Current = None
-Saddlecoil_Current = 0.079
+SCMcoil_Voltage = None
+Saddlecoil_Current = None
+Solenoidcoil_Current = 0.089
+
 
 # a message to put in your header (new lines should start with a # )
 # msg = 'Data taken with Mag690-FL1000 #410, test of pushstick with full set up, \n'+ \
-# 		'# miniMSR degaussed, miniB0: V=0.102 V, I=0.079A. \n'+ \
-# 		'# MiniSCM on: V=1.408 V, I=0.551A.'
+# 		'# miniMSR degaussed with B0 and SCM one, miniB0 V=0.089V, I=0.069A, \n'+ \
+# 		'# miniSCM V=2.5V set using PS channel 3, saddle on at I=0.079, V=0.238 at about 19.9 cm from the msr wall'
 
-msg = 'Data taken with Mag690-FL1000 #410, second test of saddle coil , \n'+ \
-		'# miniMSR degaussed, miniB0 & SCM coils off \n'+ \
-		'# Coords usually centered around the SCM are now relative to the center of the saddle coil \n'+ \
-		'# Saddle coil high field axis is vertical (+z), saddle coil: I=0.079 A, V=0.166 V'
-
+msg = 'Test for adding in a secondary monitoring FG along with a try \n'+ \
+		'# of the solenoid, SCM coords are really the center of the solenoid, I=0.089, V=0.342'
 
 
 GeometrySetUp = {
@@ -165,7 +167,9 @@ GeometrySetUp = {
 	"FG_num": FG_num,
 	"B0coil_Current": B0coil_Current,
 	"SCMcoil_Current": SCMcoil_Current,
-	"Saddlecoil_Current": Saddlecoil_Current
+	"SCMcoil_Voltage": SCMcoil_Voltage,
+	"Saddlecoil_Current": Saddlecoil_Current,
+	"Solenoidcoil_Current": Solenoidcoil_Current,
 }
 
 
@@ -182,7 +186,8 @@ def main(e):
 	#make labjack reader object
 
 	#right now just reading one FG channel, but you can put more here
-	LJ_obj = lj.LabJackT7(channel_list=[1])
+	# FG 1 for data taking; FG 2 for enviroment montioring
+	LJ_obj = lj.LabJackT7(channel_list=[1, 2])
 
 	#try to connect  - should add a try-except here
 	LJ_obj.connect()
