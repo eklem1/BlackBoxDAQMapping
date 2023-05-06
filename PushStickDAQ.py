@@ -56,13 +56,14 @@ def to_csv_header(LJ_object, filename, GeometrySetUp, msg = '', idx=-1):
 		f'#   l_out:                    {GeometrySetUp["length of tube out"]}',
 		f'#   l_scm:                    {GeometrySetUp["distance from center of SCM to MSR wall"]}',
 		f'#   FG number:                {GeometrySetUp["FG_num"]}',
-		f'#   B0coil Current:                {GeometrySetUp["B0coil_Current"]}',
-		f'#   SCMcoil Current:                {GeometrySetUp["SCMcoil_Current"]}',
+		f'#   FG type:                	{GeometrySetUp["FG_type"]}',
+		f'#   B0coil Current:           {GeometrySetUp["B0coil_Current"]}',
+		f'#   SCMcoil Current:          {GeometrySetUp["SCMcoil_Current"]}',
 		f'#   SCMcoil Voltage:          {GeometrySetUp["SCMcoil_Voltage"]}',
-		f'#   Saddlecoil Current:                {GeometrySetUp["Saddlecoil_Current"]}',
-		f'#   Solenoidcoil Current:          {GeometrySetUp["Solenoidcoil_Current"]}',
-
+		f'#   Saddlecoil Current:       {GeometrySetUp["Saddlecoil_Current"]}',
+		f'#   Solenoidcoil Current:     {GeometrySetUp["Solenoidcoil_Current"]}',
 		]
+
 	header.extend([f'#   {key}:' + ' '*(25-len(key)) + f'{val}' 
 	for key, val in LJ_object.STREAM_SETTINGS.items()])
 
@@ -142,29 +143,28 @@ dataFlag = ''
 ############## Set up of your set up geometry ##############
 #right now this you have to input yourself here
 l_tube_out = 92.7 #cm
-l_SCM = 23.9 #cm
+l_SCM = 52.4 #cm
 FG_num = [410, 409] #could be a list if you were using multiple FGs
+FG_type = [1000, 1000] #could be a list if you were using multiple FGs
 
-B0coil_Current = None
+B0coil_Current = 0.069
 SCMcoil_Current = None
 SCMcoil_Voltage = None
 Saddlecoil_Current = None
-Solenoidcoil_Current = 0.089
+Solenoidcoil_Current = 0.019
 
 
 # a message to put in your header (new lines should start with a # )
-# msg = 'Data taken with Mag690-FL1000 #410, test of pushstick with full set up, \n'+ \
-# 		'# miniMSR degaussed with B0 and SCM one, miniB0 V=0.089V, I=0.069A, \n'+ \
-# 		'# miniSCM V=2.5V set using PS channel 3, saddle on at I=0.079, V=0.238 at about 19.9 cm from the msr wall'
-
-msg = 'Test for adding in a secondary monitoring FG along with a try \n'+ \
-		'# of the solenoid, SCM coords are really the center of the solenoid, I=0.089, V=0.342'
+msg = 'Data taken with Mag690-FL1000 #410, \n'+ \
+		'# miniMSR degaussed with B0 on, miniB0 V=0.091V, I=0.069A, \n'+ \
+		'# solenoid placed at d_MSR = -30, I=0.019 A, V=0.072 V.'
 
 
 GeometrySetUp = {
 	"length of tube out": l_tube_out, 
 	"distance from center of SCM to MSR wall": l_SCM, 
 	"FG_num": FG_num,
+	"FG_type": FG_type,
 	"B0coil_Current": B0coil_Current,
 	"SCMcoil_Current": SCMcoil_Current,
 	"SCMcoil_Voltage": SCMcoil_Voltage,
