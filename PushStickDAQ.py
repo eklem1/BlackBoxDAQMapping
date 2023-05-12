@@ -143,21 +143,25 @@ dataFlag = ''
 ############## Set up of your set up geometry ##############
 #right now this you have to input yourself here
 l_tube_out = 92.7 #cm
-l_SCM = 52.4 #cm
+l_SCM = 22.35 #52.4 #cm
 FG_num = [410, 409] #could be a list if you were using multiple FGs
 FG_type = [1000, 1000] #could be a list if you were using multiple FGs
 
-B0coil_Current = 0.069
+B0coil_Current = None
 SCMcoil_Current = None
 SCMcoil_Voltage = None
 Saddlecoil_Current = None
-Solenoidcoil_Current = 0.019
+Solenoidcoil_Current = None
 
 
 # a message to put in your header (new lines should start with a # )
 msg = 'Data taken with Mag690-FL1000 #410, \n'+ \
-		'# miniMSR degaussed with B0 on, miniB0 V=0.091V, I=0.069A, \n'+ \
-		'# solenoid placed at d_MSR = -30, I=0.019 A, V=0.072 V.'
+		'# SCM is really solenoid center, testing unsymm solenoid, \n'+ \
+		'# solenoid off\n'+ \
+		'# Saddle off'
+		# '# solenoid I=0.051 A, V=0.029 V. \n'+ \
+		# '# Saddle offset by 1cm, V=0.040, I=0.019'
+		# '# miniMSR degaussed with B0 on, miniB0 V=0.053V, I=0.029A, in=+\n'+ \
 
 
 GeometrySetUp = {
@@ -188,6 +192,9 @@ def main(e):
 	#right now just reading one FG channel, but you can put more here
 	# FG 1 for data taking; FG 2 for enviroment montioring
 	LJ_obj = lj.LabJackT7(channel_list=[1, 2])
+
+	LJ_obj.CONNECTION_TYPE = 'USB'
+	LJ_obj.IP = 'ANY'
 
 	#try to connect  - should add a try-except here
 	LJ_obj.connect()

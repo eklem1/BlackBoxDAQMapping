@@ -13,6 +13,12 @@ import LabJackT7 as lj
 #make labjack reader object
 LJ_obj = lj.LabJackT7(channel_list=[1])
 
+LJ_obj.CONNECTION_TYPE = 'USB'
+LJ_obj.IP = 'ANY'
+
+print(LJ_obj.CONNECTION_TYPE )
+print(LJ_obj.IP )
+
 #try to connect
 LJ_obj.connect()
 
