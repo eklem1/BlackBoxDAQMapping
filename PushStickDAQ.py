@@ -53,6 +53,7 @@ def to_csv_header(LJ_object, filename, GeometrySetUp, msg = '', idx=-1):
 		f'#   DEVICE_TYPE:              {LJ_object.DEVICE_TYPE}',
 		f'#   CONNECTION_TYPE:          {LJ_object.CONNECTION_TYPE}',
 		f'#   IP:                       {LJ_object.IP}',
+		f'#   NumDataPoints:            {GeometrySetUp["N"]}',
 		f'#   l_out:                    {GeometrySetUp["length of tube out"]}',
 		f'#   l_scm:                    {GeometrySetUp["distance from center of SCM to MSR wall"]}',
 		f'#   FG number:                {GeometrySetUp["FG_num"]}',
@@ -93,9 +94,11 @@ def to_csv_stats(distance, LJ_object, filename):
 	else:
 		idx = 0
 
-	# write a single stream
 	means = LJ_object.data[-1].mean()
-	std = LJ_object.data[-1].std()
+	#changed to ddof=1, so I am using the unbiased estimator of the std
+	std = LJ_object.data[-1].std( ddof=1) 
+	#I'm just going to include N from now on, so you can do this later
+	#for early files
 
 	cols = [['time [s]', 'distance [cm]']]
 	cols.append(LJ_object.data[-1].columns.values+ ' mean')
@@ -147,24 +150,24 @@ l_SCM = 22.35 #52.4 #cm
 FG_num = [410, 409] #could be a list if you were using multiple FGs
 FG_type = [1000, 1000] #could be a list if you were using multiple FGs
 
-B0coil_Current = None
+B0coil_Current = 0.069
 SCMcoil_Current = None
 SCMcoil_Voltage = None
 Saddlecoil_Current = None
 Solenoidcoil_Current = None
 
-
 # a message to put in your header (new lines should start with a # )
 msg = 'Data taken with Mag690-FL1000 #410, \n'+ \
-		'# SCM is really solenoid center, testing unsymm solenoid, \n'+ \
-		'# solenoid off\n'+ \
-		'# Saddle off'
+		'# B0 on I=0.069 A, V=0.095 V, miniMSR degaussed a while ago with B0 on\n'+\
+		'# multiple d values repeated to look at reproducibility'
+
 		# '# solenoid I=0.051 A, V=0.029 V. \n'+ \
 		# '# Saddle offset by 1cm, V=0.040, I=0.019'
 		# '# miniMSR degaussed with B0 on, miniB0 V=0.053V, I=0.029A, in=+\n'+ \
 
 
 GeometrySetUp = {
+	"N": set_scan_length*set_nreads,
 	"length of tube out": l_tube_out, 
 	"distance from center of SCM to MSR wall": l_SCM, 
 	"FG_num": FG_num,
@@ -193,6 +196,7 @@ def main(e):
 	# FG 1 for data taking; FG 2 for enviroment montioring
 	LJ_obj = lj.LabJackT7(channel_list=[1, 2])
 
+	#uncomment for direct UBC connection to the Black DAQ box
 	LJ_obj.CONNECTION_TYPE = 'USB'
 	LJ_obj.IP = 'ANY'
 
@@ -229,13 +233,13 @@ def main(e):
 			times_all, df_all = LJ_obj.read(scan_rate=set_scan_rate, scan_length=set_scan_length, 
 											nreads=set_nreads, save=True)
 
-			LJ_obj.to_csv(f"{folder}{timeStamp}_data{dataFlag}_d={distanceToSet}.csv")
+			# Save just the data just taken to a file
+			LJ_obj.to_csv(f"{folder}{timeStamp}_data{dataFlag}_d={distanceToSet}.csv", idx=-1)
 			print("Done")
 
 		# finish
 		# calculate/save averages, stats and save to file
 		to_csv_stats(distanceToSet, LJ_obj, StatsFileName)
-
 
 	print('Exiting')
 	LJ_obj.disconnect()

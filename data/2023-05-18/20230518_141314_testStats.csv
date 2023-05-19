@@ -1,0 +1,27 @@
+# labjack output summary file
+# Data taken with Mag690-FL1000 #410, 
+# all coils off, miniMSR degaussed a while ago with B0 on
+# Settings:
+#   DEVICE_TYPE:              T7
+#   CONNECTION_TYPE:          USB
+#   IP:                       ANY
+#   NumDataPoints:            20
+#   l_out:                    92.7
+#   l_scm:                    22.35
+#   FG number:                [410, 409]
+#   FG type:                	[1000, 1000]
+#   B0coil Current:           None
+#   SCMcoil Current:          None
+#   SCMcoil Voltage:          None
+#   Saddlecoil Current:       None
+#   Solenoidcoil Current:     None
+#   STREAM_TRIGGER_INDEX:     0
+#   STREAM_CLOCK_SOURCE:      0
+#   STREAM_RESOLUTION_INDEX:  0
+#   STREAM_SETTLING_US:       0
+#   AIN_ALL_RANGE:            0
+#   AIN_ALL_NEGATIVE_CH:      199
+# Scan rate of last read:    100 Hz
+#
+# File started at 2023-05-18 14:13:15.772256
+# 
