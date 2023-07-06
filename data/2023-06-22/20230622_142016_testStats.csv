@@ -1,0 +1,32 @@
+# labjack output summary file
+# Data taken with Mag690-FL1000 #410,
+# B0 in various states of on, miniMSR in unknown degaussed state
+# Testing for coil const of miniB0
+# Settings:
+#   DEVICE_TYPE:              T7
+#   CONNECTION_TYPE:          USB
+#   IP:                       ANY
+#   NumDataPoints:            500
+#   l_out:                    92.7
+#   l_scm:                    22.35
+#   FG number:                [410, 409]
+#   FG type:                	[1000, 1000]
+#   B0coil Current:           -1
+#   SCMcoil Current:          -1
+#   SCMcoil Voltage:          None
+#   Saddlecoil Current:       None
+#   Solenoidcoil Current:     None
+#   STREAM_TRIGGER_INDEX:     0
+#   STREAM_CLOCK_SOURCE:      0
+#   STREAM_RESOLUTION_INDEX:  0
+#   STREAM_SETTLING_US:       0
+#   AIN_ALL_RANGE:            0
+#   AIN_ALL_NEGATIVE_CH:      199
+# Scan rate of last read:    100 Hz
+#
+# File started at 2023-06-22 14:20:18.057376
+# 
+time [s],distance [cm],CH1x mean,CH1y mean,CH1z mean,CH2x mean,CH2y mean,CH2z mean,CH1x std,CH1y std,CH1z std,CH2x std,CH2y std,CH2z std
+2023-06-22 14:22:54.140852,0.0,0.0060850975010544065,-0.003207042556954548,0.004226395962876267,0.02489916940778494,0.1266244540810585,-0.5912419358491897,0.00030714357351374833,0.0007541732707321163,0.0004102626115696483,0.000523158885195015,0.00047147918991154695,0.0004579237232774007
+time [s],distance [cm],CH1x mean,CH1y mean,CH1z mean,CH2x mean,CH2y mean,CH2z mean,CH1x std,CH1y std,CH1z std,CH2x std,CH2y std,CH2z std
+2023-06-22 14:22:54.140852,0.0,0.0060850975010544065,-0.003207042556954548,0.004226395962876267,0.02489916940778494,0.1266244540810585,-0.5912419358491897,0.00030714357351374833,0.0007541732707321163,0.0004102626115696483,0.000523158885195015,0.00047147918991154695,0.0004579237232774007

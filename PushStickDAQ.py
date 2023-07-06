@@ -59,6 +59,7 @@ def to_csv_header(LJ_object, filename, GeometrySetUp, msg = '', idx=-1):
 		f'#   FG number:                {GeometrySetUp["FG_num"]}',
 		f'#   FG type:                	{GeometrySetUp["FG_type"]}',
 		f'#   B0coil Current:           {GeometrySetUp["B0coil_Current"]}',
+		f'#   B0coil Voltage:           {GeometrySetUp["B0coil_Voltage"]}',
 		f'#   SCMcoil Current:          {GeometrySetUp["SCMcoil_Current"]}',
 		f'#   SCMcoil Voltage:          {GeometrySetUp["SCMcoil_Voltage"]}',
 		f'#   Saddlecoil Current:       {GeometrySetUp["Saddlecoil_Current"]}',
@@ -145,25 +146,22 @@ dataFlag = ''
 
 ############## Set up of your set up geometry ##############
 #right now this you have to input yourself here
-l_tube_out = 92.7 #cm
-l_SCM = 22.35 #52.4 #cm
+l_tube_out = 89.75 #cm
+l_SCM = 43.0 #52.4 #cm
 FG_num = [410, 409] #could be a list if you were using multiple FGs
 FG_type = [1000, 1000] #could be a list if you were using multiple FGs
 
-B0coil_Current = 0.069
+B0coil_Current = None #mV
+B0coil_Voltage = None #mV
 SCMcoil_Current = None
-SCMcoil_Voltage = None
-Saddlecoil_Current = None
-Solenoidcoil_Current = None
+SCMcoil_Voltage = None #V
+Saddlecoil_Current = None #A
+Solenoidcoil_Current = None #A
 
 # a message to put in your header (new lines should start with a # )
-msg = 'Data taken with Mag690-FL1000 #410, \n'+ \
-		'# B0 on I=0.069 A, V=0.095 V, miniMSR degaussed a while ago with B0 on\n'+\
-		'# multiple d values repeated to look at reproducibility'
-
-		# '# solenoid I=0.051 A, V=0.029 V. \n'+ \
-		# '# Saddle offset by 1cm, V=0.040, I=0.019'
-		# '# miniMSR degaussed with B0 on, miniB0 V=0.053V, I=0.029A, in=+\n'+ \
+msg = 'Data taken with Mag690-FL1000 #410,\n'+ \
+		'# miniMSR degaussed with miniB0 on, but badly. All coils off.'#+\
+		'# miniB0 powered with function generator (set to output 2.87V, but b0 sees 74.4mV)'
 
 
 GeometrySetUp = {
@@ -173,6 +171,7 @@ GeometrySetUp = {
 	"FG_num": FG_num,
 	"FG_type": FG_type,
 	"B0coil_Current": B0coil_Current,
+	"B0coil_Voltage": B0coil_Voltage,
 	"SCMcoil_Current": SCMcoil_Current,
 	"SCMcoil_Voltage": SCMcoil_Voltage,
 	"Saddlecoil_Current": Saddlecoil_Current,
